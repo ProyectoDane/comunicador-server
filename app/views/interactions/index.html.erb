@@ -1,7 +1,8 @@
-<h1>Interactions#index</h1>
-<p>Find me in app/views/interactions/index.html.erb</p>
+<h1>Gráfico!</h1>
+<div id="chart-element"></div>
 
 <%= content_for :scripts do %>
   <%= subscribe_to '/interactions/new' %>
+  <%= javascript_include_tag 'https://www.google.com/jsapi' %>
   <%= javascript_include_tag 'interactions' %>
 <% end %>
