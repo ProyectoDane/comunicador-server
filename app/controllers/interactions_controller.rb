@@ -13,11 +13,10 @@ class InteractionsController < ApplicationController
   # POST /interactions
   # POST /interactions.json
   def create
-    # @interactions = Interaction.create(params[:interactions])
-    @interaction = Interaction.create(receptor: "Some guy", picture: "Some picture")
+    @interaction = Interaction.create(params[:interactions])
 
     respond_to do |format|
-      if true # @interactions.save
+      if @interaction.save
         PrivatePub.publish_to '/interactions/new', interaction: @interaction.to_json
 
         format.json { render json: @interaction, status: :created, location: @interaction }
