@@ -8,6 +8,8 @@ gem 'thin'
 
 gem 'private_pub'
 
+gem 'rack-cors'
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
@@ -17,8 +19,6 @@ end
 group :development do
   gem 'pry'
   gem 'pry-rails'
-  gem 'pry-debugger'
-  gem 'pry-stack_explorer'
 end
 
 gem 'jquery-rails'
