@@ -13,3 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require private_pub
+//= require bootstrap.min
+//= require bootstrap-growl.min
+//= require raphael.min
+//= require morris.min
+//= require morris-data
+//= require admin
+//= require interactions
