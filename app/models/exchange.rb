@@ -1,10 +1,15 @@
 class Exchange < ActiveRecord::Base
   fields do
-  	receptor :string
-    picture :string
     level :integer
+    pick 	:string
+    reach :string
+    drop 	:string
     timestamps
   end
 
-  attr_accessible :receptor, :picture, :level
+  belongs_to :card
+  belongs_to :user
+  belongs_to :receiver
+
+  attr_accessible :level, :pick, :reach, :drop, :card_id, :user_id, :receiver_id
 end

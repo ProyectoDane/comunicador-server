@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   fields do
-    name :string
+    name      :string
     last_name :string
     birthdate :datetime
     remote_id :string

@@ -17,22 +17,29 @@ class ExchangesController < ApplicationController
 
     remote_object = JSON.parse(params[:data])
 
-    User.find_or_create_by(remote_id: remote_object[:userId], name: remote_object[:userName]) do |user|
-      user.last_name = remote_object[:userLastName]
-      user.birthdate = remote_object[:userBirthdate]
+    user_params = remote_object[:user]
+    receiver_params = remote_object[:receiver]
+    registry_params = remote_object[:registry]
+
+    user = User.find_or_create_by(remote_id: user_params[:id], name: user_params[:name]) do |new_user|
+      user.last_name = user_params[:last_lame]
+      user.birthdate = user_params[:birthdate]
     end
 
-    Card.find_or_create_by(name: remote_object[:cardName])
+    card = Card.find_or_create_by(remote_object[:card])
     
-    Receiver.find_or_create_by(name: remote_object[:receiverName]) do |receiver|
-      receiver.last_name = remote_object[:receiverLastName]
-      receiver.relationship = remote_object[:relationship] # Another model?
+    receiver = Receiver.find_or_create_by(remote_id: receiver_params[:id], name: receiver_params[:name]) do |new_receiver|
+      receiver.last_name = receiver_params[:last_name]
+      receiver.relationship = receiver_params[:relationship] # Another model?
     end
 
     Exchange.create({
-      #card_id: card.id
-      #user_id: user.id
-      #receiver_id: receiver.id
+      card_id: card.id,
+      user_id: user.id,
+      receiver_id: receiver.id,
+      pick:  registry_params[:pick],
+      reach: registry_params[:reach],
+      drop:  registry_params[:drop],
       level: remote_object[:level]
     })
 
