@@ -8,7 +8,7 @@ var GooglePieChart = function(chartElement) {
 
 GooglePieChart.prototype = {
     options: {
-        'title':'Interactions',
+        'title':'Exchanges',
         'width':400,
         'height':300,
         'animation': {

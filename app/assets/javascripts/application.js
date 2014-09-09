@@ -19,4 +19,4 @@
 //= require morris.min
 //= require morris-data
 //= require admin
-//= require interactions
+//= require exchangess

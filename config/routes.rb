@@ -1,5 +1,5 @@
 ComunicadorServer::Application.routes.draw do
-  root to: 'interactions#index'
+  root to: 'exchanges#index'
 
-  resources :interactions
+  resources :exchanges
 end

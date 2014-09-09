@@ -1,17 +1,17 @@
-class InteractionsController < ApplicationController
-  # GET /interactions
-  # GET /interactions.json
+class ExchangesController < ApplicationController
+  # GET /exchanges
+  # GET /exchanges.json
   def index
-    @interactions = Interaction.all
+    @exchanges = Exchange.all
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @interactions }
+      format.json { render json: @exchanges }
     end
   end
 
-  # POST /interactions
-  # POST /interactions.json
+  # POST /exchanges
+  # POST /exchanges.json
   def create
     raise 'No data received' if params[:data].nil?
 
@@ -29,7 +29,7 @@ class InteractionsController < ApplicationController
       receiver.relationship = remote_object[:relationship] # Another model?
     end
 
-    Interaction.create({
+    Exchange.create({
       #card_id: card.id
       #user_id: user.id
       #receiver_id: receiver.id
@@ -37,8 +37,8 @@ class InteractionsController < ApplicationController
     })
 
     respond_to do |format|
-      if true #@interaction.save
-        PrivatePub.publish_to '/interactions/new', some_data: 2
+      if true
+        PrivatePub.publish_to '/exchanges/new', some_data: 2
 
         format.json { render json: { success: true }, status: :created }
       else
