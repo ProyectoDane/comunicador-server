@@ -17,6 +17,5 @@
 //= require bootstrap-growl.min
 //= require raphael.min
 //= require morris.min
-//= require morris-data
 //= require admin
 //= require exchanges

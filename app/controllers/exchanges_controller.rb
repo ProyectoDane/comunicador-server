@@ -40,6 +40,7 @@ class ExchangesController < ApplicationController
       pick:  registry_params[:pick],
       reach: registry_params[:reach],
       drop:  registry_params[:drop],
+      date:  DateTime.now, # RODO: Parse this
       level: remote_object[:level]
     })
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140909203708) do
+ActiveRecord::Schema.define(:version => 20140910043134) do
 
   create_table "cards", :force => true do |t|
     t.string "name"
@@ -19,8 +19,7 @@ ActiveRecord::Schema.define(:version => 20140909203708) do
 
   create_table "exchanges", :force => true do |t|
     t.integer  "level"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "date"
     t.string   "pick"
     t.string   "reach"
     t.string   "drop"
@@ -34,9 +33,10 @@ ActiveRecord::Schema.define(:version => 20140909203708) do
   add_index "exchanges", ["user_id"], :name => "index_exchanges_on_user_id"
 
   create_table "receivers", :force => true do |t|
-    t.string "name"
-    t.string "last_name"
-    t.string "relationship"
+    t.string  "name"
+    t.string  "last_name"
+    t.string  "relationship"
+    t.integer "remote_id"
   end
 
   create_table "users", :force => true do |t|
