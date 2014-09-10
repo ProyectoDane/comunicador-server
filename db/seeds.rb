@@ -34,13 +34,13 @@ end
 
 Exchange.delete_all
 
-Exchange.create({ card_id: cid('Pelota'), user_id: uid('Jorge'), receiver_id: rid('Damian'), level: 1, date: DateTime.now,
+Exchange.create({ card_id: cid('Pelota'), user_id: uid('Jorge'), receiver_id: rid('Damian'), level: 1, date: DateTime.now - 2.months,
   pick: 'withoutHelp', reach: 'withPartialHelp', drop: 'withHelp' })
 
-Exchange.create({ card_id: cid('Perro'), user_id: uid('Jorge'), receiver_id: rid('Damian'), level: 1, date: DateTime.now,
+Exchange.create({ card_id: cid('Perro'), user_id: uid('Jorge'), receiver_id: rid('Damian'), level: 1, date: DateTime.now - 2.months,
     pick: 'withHelp', reach: 'withPartialHelp', drop: 'withHelp' })
   
-Exchange.create({ card_id: cid('Libro'), user_id: uid('Jorge'), receiver_id: rid('Magali'), level: 1, date: DateTime.now,
+Exchange.create({ card_id: cid('Libro'), user_id: uid('Jorge'), receiver_id: rid('Magali'), level: 1, date: DateTime.now - 1.months,
     pick: 'withoutHelp', reach: 'withoutHelp', drop: 'withPartialHelp' })
 
 Exchange.create({ card_id: cid('Pelota'), user_id: uid('Miguel'), receiver_id: rid('Aldana'), level: 1, date: DateTime.now,
