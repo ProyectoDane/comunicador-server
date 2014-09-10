@@ -205,8 +205,8 @@
           data: [
             <% Exchange.each_by_month do |date, exchanges| %>
               {
-                  period: date.year,
-                  exchanges: exchanges.count
+                  period: '<%= date.year %>',
+                  exchanges: <%= exchanges.count %>
               },
             <% end %>
           ],
@@ -224,8 +224,8 @@
           data: [
             <% Exchange.each_by_receiver_name do |exchange| %>
               {
-                  label: exchanges.reciever_name,
-                  value: exchanges.count
+                  label: '<%= exchange.reciever_name %>',
+                  value: '<%= exchange.count %>'
               },
             <% end %>
           ],
@@ -238,8 +238,8 @@
           data: [
           <% Exchange.each_by_user_name do |exchange| %>
             {
-                user_name: exchanges.user_name,
-                exchanges: exchanges.count
+                user_name: '<%= exchange.user_name %>',
+                exchanges: <%= exchange.count %>
             },
           <% end %>
           ],

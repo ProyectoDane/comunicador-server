@@ -11,7 +11,7 @@ class Exchange < ActiveRecord::Base
   belongs_to :user
   belongs_to :receiver
 
-  attr_accessible :level, :pick, :reach, :drop, :card_id, :user_id, :receiver_id
+  attr_accessible :level, :pick, :reach, :drop, :date, :card_id, :user_id, :receiver_id
 
   def self.each_by_month &block
     all.group_by { |exchange| exchange.date.beginning_of_month }.each(&block)
