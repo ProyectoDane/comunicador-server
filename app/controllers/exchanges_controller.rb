@@ -24,14 +24,14 @@ class ExchangesController < ApplicationController
 
       user = User.find_or_create_by(remote_id: user_params[:id], name: user_params[:name]) do |new_user|
         user.last_name = user_params[:last_lame]
-        user.birthdate = user_params[:birthdate]
+        user.birthdate = DateTime.parse(user_params[:birthdate])
       end
 
       card = Card.find_or_create_by(remote_object[:card])
       
       receiver = Receiver.find_or_create_by(remote_id: receiver_params[:id], name: receiver_params[:name]) do |new_receiver|
         receiver.last_name = receiver_params[:last_name]
-        receiver.relationship = receiver_params[:relationship] # Another model?
+        receiver.relationship = receiver_params[:relationship]
       end
 
       exchange = Exchange.create({
