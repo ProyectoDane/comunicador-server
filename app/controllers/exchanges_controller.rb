@@ -34,26 +34,62 @@ class ExchangesController < ApplicationController
         receiver.relationship = receiver_params[:relationship] # Another model?
       end
 
-      Exchange.create({
+      exchange = Exchange.create({
         card_id: card.id,
         user_id: user.id,
         receiver_id: receiver.id,
         pick:  registry_params[:pick],
         reach: registry_params[:reach],
         drop:  registry_params[:drop],
-        date:  DateTime.now, # RODO: Parse this
+        date:  DateTime.parse(remote_object[:date]),
         level: remote_object[:level]
       })
     end
 
     respond_to do |format|
       begin
-        PrivatePub.publish_to '/exchanges/new', some_data: 2
+        PrivatePub.publish_to '/exchanges/new',
+          exchangeHTML: exchange ? render_to_string(exchange) : "",
+          users_count: User.count,
+          cards_count: Card.count,
+          exchanges_count: Exchange.count,
+          receivers_count: Receiver.count
       rescue Exception
         raise "Faye is offline!!"
       end
 
-      format.json { render json: { success: true }, status: :created }
+      format.json { render json: { exchange: @exchange.to_json, success: true }, status: :created }
+    end
+  end
+
+
+  def by_month
+    response = Exchange.by_month.map do |date, exchanges|
+      { period: date.strftime('%Y-%m'), exchanges: exchanges.count }
+    end
+
+    respond_to do |format|
+      format.json { render json: response }
+    end
+  end
+
+  def by_receiver_name
+    response = Exchange.by_receiver_name.map do |exchange|
+      { label: exchange.reciever_name, value: exchange.count }
+    end
+
+    respond_to do |format|
+      format.json { render json: response }
+    end
+  end
+
+  def by_user_name
+    response = Exchange.by_user_name.map do |exchange|
+      { user_name: exchange.user_name, exchanges: exchange.count }
+    end
+
+    respond_to do |format|
+      format.json { render json: response }
     end
   end
 end

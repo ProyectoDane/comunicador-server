@@ -1,0 +1,8 @@
+<tr>
+  <th><%= exchange.date.strftime('%d/%m/%y') %></th>
+  <th><%= exchange.receiver.name %></th>
+  <th><%= exchange.card.name %></th>
+  <th><%= t("#{exchange.pick.downcase}") %></th>
+  <th><%= t("#{exchange.reach.downcase}") %></th>
+  <th><%= t("#{exchange.drop.downcase}") %></th>
+</tr>

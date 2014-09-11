@@ -83,14 +83,14 @@
           </div>
           <!-- /.panel-heading -->
           <div class="panel-body">
-            <div id="morris-area-chart"></div>
+            <div id="morris-line-chart"></div>
           </div>
           <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <i class="fa fa-bar-chart-o fa-fw"></i> Intercambios por usuario
+            <i class="fa fa-bar-chart-o fa-fw"></i> Intercambios
           </div>
           <!-- /.panel-heading -->
           <div class="panel-body">
@@ -108,17 +108,8 @@
                         <th>Soltar</th>
                       </tr>
                     </thead>
-                    <tbody>
-                    <% Exchange.all.each do |exchange| %>
-                      <tr>
-                        <th><%= exchange.date.strftime('%d/%m/%y') %></th>
-                        <th><%= exchange.receiver.name %></th>
-                        <th><%= exchange.card.name %></th>
-                        <th><%= t("#{exchange.pick.downcase}") %></th>
-                        <th><%= t("#{exchange.reach.downcase}") %></th>
-                        <th><%= t("#{exchange.drop.downcase}") %></th>
-                      </tr>
-                    <% end %>
+                    <tbody id="exchanges">
+                      <%= render Exchange.all %>
                    </tbody>
                   </table>
                 </div>
@@ -149,7 +140,7 @@
       <div class="col-lg-4">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <i class="fa fa-bar-chart-o fa-fw"></i> Intercambios por receptores
+            <i class="fa fa-bar-chart-o fa-fw"></i> Intercambios por usuario
           </div>
           <div class="panel-body">
             <div id="morris-bar-chart"></div>
@@ -171,58 +162,60 @@
   <%= subscribe_to '/exchanges/new' %>
   <script>
     <% unless Exchange.count.zero? %>
-      // Area Chart
-      Morris.Line({
-          element: 'morris-area-chart',
-          data: [
-            <% Exchange.each_by_month do |date, exchanges| %>
+      window.charts = {
+        // Area Chart
+        by_month: Morris.Line({
+            element: 'morris-line-chart',
+            data: [
+              <% Exchange.limit(2).by_month.each do |date, exchanges| %>
+                {
+                    period: "<%= date.strftime('%Y-%m') %>",
+                    exchanges: <%= exchanges.count %>
+                },
+              <% end %>
+            ],
+            xkey: 'period',
+            ykeys: ['exchanges'],
+            labels: ['Intercambios'],
+            pointSize: 2,
+            hideHover: 'auto',
+            resize: true
+        }),
+
+        // Donut Chart
+        by_receiver_name: Morris.Donut({
+            element: 'morris-donut-chart',
+            data: [
+              <% Exchange.limit(2).by_receiver_name.each do |exchange| %>
+                {
+                    label: '<%= exchange.reciever_name %>',
+                    value: '<%= exchange.count %>'
+                },
+              <% end %>
+            ],
+            resize: true
+        }),
+
+        // Bar Chart
+        by_user_name: Morris.Bar({
+            element: 'morris-bar-chart',
+            data: [
+            <% Exchange.limit(2).by_user_name.each do |exchange| %>
               {
-                  period: "<%= date.strftime('%Y-%m') %>",
-                  exchanges: <%= exchanges.count %>
+                  user_name: '<%= exchange.user_name %>',
+                  exchanges: <%= exchange.count %>
               },
             <% end %>
-          ],
-          xkey: 'period',
-          ykeys: ['exchanges'],
-          labels: ['Intercambios'],
-          pointSize: 2,
-          hideHover: 'auto',
-          resize: true
-      });
-
-      // Donut Chart
-      Morris.Donut({
-          element: 'morris-donut-chart',
-          data: [
-            <% Exchange.each_by_receiver_name do |exchange| %>
-              {
-                  label: '<%= exchange.reciever_name %>',
-                  value: '<%= exchange.count %>'
-              },
-            <% end %>
-          ],
-          resize: true
-      });
-
-      // Bar Chart
-      Morris.Bar({
-          element: 'morris-bar-chart',
-          data: [
-          <% Exchange.each_by_user_name do |exchange| %>
-            {
-                user_name: '<%= exchange.user_name %>',
-                exchanges: <%= exchange.count %>
-            },
-          <% end %>
-          ],
-          xkey: 'user_name',
-          ykeys: ['exchanges'],
-          labels: ['Intercambios'],
-          barRatio: 0.4,
-          xLabelAngle: 35,
-          hideHover: 'auto',
-          resize: true
-      });
+            ],
+            xkey: 'user_name',
+            ykeys: ['exchanges'],
+            labels: ['Intercambios'],
+            barRatio: 0.4,
+            xLabelAngle: 35,
+            hideHover: 'auto',
+            resize: true
+        })
+      };
     <% end %>
   </script>
 <% end %>
