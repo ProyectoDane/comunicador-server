@@ -1,21 +1,28 @@
-//= require GooglePieChart
-
 (function() {
-    // var chart = new GooglePieChart();
+    var remoteData;
+
+    var setHTMLFromData = function(property) {
+        if (remoteData[property]) {
+            document.getElementById(property).innerHTML = remoteData[property];
+        }
+    };
 
     PrivatePub.subscribe("/exchanges/new", function(data, channel) {
-        // var newValue = 1000 - chart.data.getValue(0, 1);
-        // chart.data.setValue(0, 1, newValue);
-
-        // chart.draw();
-        // console.log("exchange", jQuery.parseJSON(data));
-
         $.growl({
-            title: '<strong>Atención:</strong> ',
+            title: '<strong>Atención:</strong><br />',
             message: 'Nueva interacción!!'
         },{
             type: 'success'
         });
+
+        remoteData = data;
+
+        setHTMLFromData("users_count");
+        setHTMLFromData("cards_count");
+        setHTMLFromData("exchanges_count");
+        setHTMLFromData("receivers_count");
+
+        console.log(remoteData)
 
         setTimeout(function() {
             window.location.reload();
