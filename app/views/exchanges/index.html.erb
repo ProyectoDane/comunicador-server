@@ -167,7 +167,7 @@
         by_month: Morris.Line({
             element: 'morris-line-chart',
             data: [
-              <% Exchange.limit(2).by_month.each do |date, exchanges| %>
+              <% Exchange.by_month.each do |date, exchanges| %>
                 {
                     period: "<%= date.strftime('%Y-%m') %>",
                     exchanges: <%= exchanges.count %>
@@ -186,7 +186,7 @@
         by_receiver_name: Morris.Donut({
             element: 'morris-donut-chart',
             data: [
-              <% Exchange.limit(2).by_receiver_name.each do |exchange| %>
+              <% Exchange.by_receiver_name.each do |exchange| %>
                 {
                     label: '<%= exchange.reciever_name %>',
                     value: '<%= exchange.count %>'
@@ -200,7 +200,7 @@
         by_user_name: Morris.Bar({
             element: 'morris-bar-chart',
             data: [
-            <% Exchange.limit(2).by_user_name.each do |exchange| %>
+            <% Exchange.by_user_name.each do |exchange| %>
               {
                   user_name: '<%= exchange.user_name %>',
                   exchanges: <%= exchange.count %>
