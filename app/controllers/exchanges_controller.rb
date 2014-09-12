@@ -18,31 +18,31 @@ class ExchangesController < ApplicationController
     remote_object = JSON.parse(params[:data])
 
     unless remote_object.empty?
-      user_params = remote_object[:user]
-      receiver_params = remote_object[:receiver]
-      registry_params = remote_object[:registry]
+      user_params = remote_object['user']
+      receiver_params = remote_object['receiver']
+      registry_params = remote_object['registry']
 
-      user = User.find_or_create_by(remote_id: user_params[:id], name: user_params[:name]) do |new_user|
-        user.last_name = user_params[:last_lame]
-        user.birthdate = DateTime.parse(user_params[:birthdate])
+      user = User.find_or_create_by(remote_id: user_params['id'], name: user_params['name']) do |new_user|
+        new_user.last_name = user_params['last_lame']
+        new_user.birthdate = DateTime.parse(user_params['birthdate'])
       end
 
-      card = Card.find_or_create_by(remote_object[:card])
+      card = Card.find_or_create_by(remote_object['card'])
       
-      receiver = Receiver.find_or_create_by(remote_id: receiver_params[:id], name: receiver_params[:name]) do |new_receiver|
-        receiver.last_name = receiver_params[:last_name]
-        receiver.relationship = receiver_params[:relationship]
+      receiver = Receiver.find_or_create_by(remote_id: receiver_params['id'], name: receiver_params['name']) do |new_receiver|
+        new_receiver.last_name = receiver_params['last_name']
+        new_receiver.relationship = receiver_params['relationship']
       end
 
       exchange = Exchange.create({
         card_id: card.id,
         user_id: user.id,
         receiver_id: receiver.id,
-        pick:  registry_params[:pick],
-        reach: registry_params[:reach],
-        drop:  registry_params[:drop],
-        date:  DateTime.parse(remote_object[:date]),
-        level: remote_object[:level]
+        pick:  registry_params['pick'],
+        reach: registry_params['reach'],
+        drop:  registry_params['drop'],
+        date:  DateTime.parse(remote_object['date']),
+        level: remote_object['level']
       })
     end
 
