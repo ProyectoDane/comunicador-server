@@ -13,18 +13,16 @@ class ExchangesController < ApplicationController
   # POST /exchanges
   # POST /exchanges.json
   def create
-    raise 'No data received' if params[:data].nil?
+    remote_object = RemoteObject.new(params[:data])
 
-    remote_object = JSON.parse(params[:data])
-
-    unless remote_object.empty?
+    if remote_object.correct?
       user_params = remote_object['user']
       receiver_params = remote_object['receiver']
       registry_params = remote_object['registry']
 
       user = User.find_or_create_by(remote_id: user_params['id'], name: user_params['name']) do |new_user|
         new_user.last_name = user_params['last_lame']
-        new_user.birthdate = DateTime.parse(user_params['birthdate'])
+        new_user.birthdate = parse_date(user_params['birthdate'])
       end
 
       card = Card.find_or_create_by(remote_object['card'])
@@ -41,24 +39,29 @@ class ExchangesController < ApplicationController
         pick:  registry_params['pick'],
         reach: registry_params['reach'],
         drop:  registry_params['drop'],
-        date:  DateTime.parse(remote_object['date']),
+        date:  parse_date(remote_object['date']),
         level: remote_object['level']
       })
     end
 
     respond_to do |format|
-      begin
-        PrivatePub.publish_to '/exchanges/new',
-          exchangeHTML: exchange ? render_to_string(exchange) : "",
-          users_count: User.count,
-          cards_count: Card.count,
-          exchanges_count: Exchange.count,
-          receivers_count: Receiver.count
-      rescue Exception
-        raise "Faye is offline!!"
-      end
+      if remote_object.correct?
+        begin
+          PrivatePub.publish_to '/exchanges/new',
+            exchangeHTML: exchange ? render_to_string(exchange) : "",
+            users_count: User.count,
+            cards_count: Card.count,
+            exchanges_count: Exchange.count,
+            receivers_count: Receiver.count
+        rescue Exception
+          puts 'Warning:'
+          puts "\tFaye is offline!! We cannot send realtime notifications to the server at this time."
+        end
 
-      format.json { render json: { exchange: @exchange.to_json, success: true }, status: :created }
+        format.json { render json: { exchange: @exchange.to_json, success: true }, status: :created }
+      else
+        format.json { render json: { success: false }, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -92,4 +95,13 @@ class ExchangesController < ApplicationController
       format.json { render json: response }
     end
   end
+
+  private
+    def parse_date date
+      begin
+        DateTime.parse(date) unless date.nil?
+      rescue ArgumentError
+        nil
+      end
+    end
 end
